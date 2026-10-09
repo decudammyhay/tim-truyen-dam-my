@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tìm Truyện Đam - Tra Cứu & Đóng Góp Link Truyện</title>
+    <title>Tìm Truyện Đam</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -97,6 +97,51 @@
 
         .container { max-width: 1100px; margin: 25px auto; padding: 0 20px; }
         
+        /* Thống kê Mini Analytics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-info .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+
+        .stat-info .stat-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
         .card-box { 
             background: var(--bg-card); border-radius: 16px; 
             border: 1px solid var(--border-color); padding: 24px; 
@@ -117,8 +162,27 @@
 
         input:focus, select:focus { border-color: var(--primary); }
 
-        /* Bảng hiển thị & Thanh tìm kiếm */
-        .search-input { width: 100%; margin-bottom: 15px; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.95rem; }
+        /* Bảng hiển thị & Bộ Lọc Tra Cứu */
+        .filter-bar {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .filter-bar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .search-input, .filter-select { 
+            width: 100%; padding: 12px 16px; border-radius: 10px; 
+            border: 1px solid var(--border-color); background: var(--bg-primary); 
+            color: var(--text-primary); font-size: 0.95rem; outline: none;
+        }
+
+        .search-input:focus, .filter-select:focus { border-color: var(--primary); }
 
         .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; background: var(--bg-card); text-align: left; font-size: 0.9rem; }
@@ -162,6 +226,31 @@
     </header>
 
     <div class="container">
+
+        <!-- Thống Kê Mini Analytics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value" id="statStories">0</div>
+                    <div class="stat-label">Tổng số truyện</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-users-viewfinder"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value" id="statTeams">0</div>
+                    <div class="stat-label">Team dịch tham gia</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-link"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value" id="statLinks">0</div>
+                    <div class="stat-label">Tổng số liên kết</div>
+                </div>
+            </div>
+        </div>
 
         <!-- Form Nhập Truyện Mới -->
         <div class="card-box">
@@ -212,7 +301,18 @@
                 <i class="fa-solid fa-magnifying-glass"></i> Tra Cứu Truyện & Link Dịch (<span id="count">0</span>)
             </div>
 
-            <input type="text" id="searchInput" class="search-input" placeholder="Gõ tìm tên truyện hoặc team dịch..." oninput="renderTable()">
+            <!-- Thanh Tìm Kiếm & Bộ Lọc Team Dịch -->
+            <div class="filter-bar">
+                <input type="text" id="searchInput" class="search-input" placeholder="Gõ từ khóa tìm tên truyện..." oninput="renderTable()">
+                <select id="teamFilter" class="filter-select" onchange="renderTable()">
+                    <option value="">-- Tất cả Team dịch --</option>
+                    <option value="Đam Mỹ Thư Quán">Đam Mỹ Thư Quán</option>
+                    <option value="Đề Cử Đam Mỹ Hay">Đề Cử Đam Mỹ Hay</option>
+                    <option value="Góc Đam Mỹ Của Thỏ">Góc Đam Mỹ Của Thỏ</option>
+                    <option value="Team Bé Bi">Team Bé Bi</option>
+                    <option value="Trà Hoa Nữ">Trà Hoa Nữ</option>
+                </select>
+            </div>
 
             <div class="table-responsive">
                 <table>
@@ -262,10 +362,32 @@
             try {
                 const res = await fetch(GOOGLE_SCRIPT_URL);
                 storyList = await res.json();
+                updateStats();
                 renderTable();
             } catch (err) {
                 console.error("Lỗi khi tải dữ liệu:", err);
             }
+        }
+
+        // Cập nhật Thống Kê Mini Analytics
+        function updateStats() {
+            document.getElementById('statStories').innerText = storyList.length;
+
+            // Đếm số team duy nhất
+            const teamsSet = new Set();
+            let totalLinks = 0;
+
+            storyList.forEach(s => {
+                if (s["Team dịch"] && s["Team dịch"].trim() !== '') {
+                    teamsSet.add(s["Team dịch"].trim());
+                }
+                if (s["Link blogger"] && s["Link blogger"].trim() !== '') totalLinks++;
+                if (s["Link motruyen"] && s["Link motruyen"].trim() !== '') totalLinks++;
+                if (s["Link khác"] && s["Link khác"].trim() !== '') totalLinks++;
+            });
+
+            document.getElementById('statTeams').innerText = teamsSet.size;
+            document.getElementById('statLinks').innerText = totalLinks;
         }
 
         // Lưu thông tin truyện mới
@@ -302,24 +424,27 @@
             }
         }
 
-        // Render bảng dữ liệu & Tự động sắp xếp A-Z
+        // Render bảng dữ liệu, Bộ Lọc Team & Tự động sắp xếp A-Z
         function renderTable() {
             const query = document.getElementById('searchInput').value.toLowerCase();
+            const selectedTeam = document.getElementById('teamFilter').value;
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
 
-            // Sắp xếp tự động A-Z theo tên truyện
+            // Lọc theo từ khóa tìm kiếm & Team được chọn
             const filtered = storyList
-                .filter(s => 
-                    (s["Tên truyện"] && String(s["Tên truyện"]).toLowerCase().includes(query)) || 
-                    (s["Team dịch"] && String(s["Team dịch"]).toLowerCase().includes(query))
-                )
+                .filter(s => {
+                    const matchQuery = (s["Tên truyện"] && String(s["Tên truyện"]).toLowerCase().includes(query)) ||
+                                       (s["Team dịch"] && String(s["Team dịch"]).toLowerCase().includes(query));
+                    const matchTeam = !selectedTeam || (s["Team dịch"] && String(s["Team dịch"]) === selectedTeam);
+                    return matchQuery && matchTeam;
+                })
                 .sort((a, b) => String(a["Tên truyện"] || '').localeCompare(String(b["Tên truyện"] || ''), 'vi', { sensitivity: 'base' }));
 
             document.getElementById('count').innerText = filtered.length;
 
             if(filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-secondary); padding: 20px;">Đang tải dữ liệu hoặc chưa tìm thấy truyện...</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-secondary); padding: 20px;">Đang tải dữ liệu hoặc chưa tìm thấy truyện phù hợp...</td></tr>`;
                 return;
             }
 
