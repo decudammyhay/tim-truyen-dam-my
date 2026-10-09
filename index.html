@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tìm Truyện Đam - Tra Cứu & Đóng Góp</title>
+    <title>Tìm Truyện Đam - Tra Cứu & Đóng Góp Link Truyện</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -20,7 +20,7 @@
             --card-shadow: 0 4px 15px rgba(229, 62, 62, 0.08);
         }
 
-        /* Các Theme Màu Tùy Chọn */
+        /* Tùy chọn Theme Màu Giao Diện */
         [data-theme="blue"] {
             --bg-primary: #f0f8ff;
             --bg-card: #ffffff;
@@ -69,7 +69,7 @@
             --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.25s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.25s, color 0.25s, border-color 0.25s; }
         body { background-color: var(--bg-primary); color: var(--text-primary); padding-bottom: 60px; }
         
         header { 
@@ -85,7 +85,7 @@
         .header-controls { display: flex; align-items: center; gap: 10px; }
 
         .theme-select {
-            padding: 6px 12px; border-radius: 8px;
+            padding: 8px 14px; border-radius: 8px;
             border: 1px solid var(--border-color);
             background: var(--bg-primary); color: var(--text-primary);
             font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none;
@@ -117,7 +117,7 @@
 
         input:focus, select:focus { border-color: var(--primary); }
 
-        /* Bảng hiển thị */
+        /* Bảng hiển thị & Thanh tìm kiếm */
         .search-input { width: 100%; margin-bottom: 15px; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.95rem; }
 
         .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); }
@@ -150,7 +150,7 @@
             <i class="fa-solid fa-heart"></i> Tìm Truyện Đam
         </div>
         <div class="header-controls">
-            <!-- Selector Đổi Theme Màu -->
+            <!-- Selector Đổi Chủ Đề Màu -->
             <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
                 <option value="default">🌸 Đỏ Nhạt (Mặc định)</option>
                 <option value="blue">🌊 Xanh Lam</option>
@@ -163,7 +163,7 @@
 
     <div class="container">
 
-        <!-- Form Thêm Truyện Mới -->
+        <!-- Form Nhập Truyện Mới -->
         <div class="card-box">
             <div class="card-title">
                 <i class="fa-solid fa-plus-circle"></i> Đóng Góp / Thêm Link Truyện Mới
@@ -206,7 +206,7 @@
             </form>
         </div>
 
-        <!-- Bảng Tra Cứu Truyện -->
+        <!-- Bảng Danh Sách Tra Cứu -->
         <div class="card-box">
             <div class="card-title">
                 <i class="fa-solid fa-magnifying-glass"></i> Tra Cứu Truyện & Link Dịch (<span id="count">0</span>)
@@ -226,7 +226,7 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <!-- Render từ JS -->
+                        <!-- Render dữ liệu từ JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -237,12 +237,12 @@
     <div class="toast" id="toastNotification">Thông báo</div>
 
     <script>
-        // 🛠️ DÁN URL APPS SCRIPT CỦA BẠN VÀO ĐÂY:
+        // URL Google Apps Script API chính thức
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-z0tWtgmzXeeUdeWNPSv8UcDGiFN7u5_wCDKnxdE8NXXVcTUiJPoyeuiKyzdKXw/exec";
 
         let storyList = [];
 
-        // Thay đổi chủ đề màu sắc
+        // Đổi chủ đề màu sắc
         function changeTheme(theme) {
             if(theme === 'default') {
                 document.body.removeAttribute('data-theme');
@@ -252,7 +252,7 @@
             localStorage.setItem('user_theme', theme);
         }
 
-        // Khôi phục theme đã chọn trước đó
+        // Lấy theme đã lưu
         const savedTheme = localStorage.getItem('user_theme') || 'default';
         document.getElementById('themeSelect').value = savedTheme;
         changeTheme(savedTheme);
@@ -264,11 +264,11 @@
                 storyList = await res.json();
                 renderTable();
             } catch (err) {
-                console.error("Lỗi tải dữ liệu:", err);
+                console.error("Lỗi khi tải dữ liệu:", err);
             }
         }
 
-        // Gửi dữ liệu về Google Sheet
+        // Lưu thông tin truyện mới
         async function saveStory(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSave');
@@ -292,25 +292,29 @@
                 });
 
                 document.getElementById('storyForm').reset();
-                showToast("Đã gửi thông tin truyện về Google Sheet!");
+                showToast("Đã gửi thông tin truyện về Google Sheet thành công!");
                 setTimeout(fetchStories, 1500);
             } catch (err) {
-                alert("Lỗi khi gửi: " + err.message);
+                alert("Lỗi khi gửi dữ liệu: " + err.message);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Gửi Về Google Sheet';
             }
         }
 
+        // Render bảng dữ liệu & Tự động sắp xếp A-Z
         function renderTable() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
 
-            const filtered = storyList.filter(s => 
-                (s["Tên truyện"] && String(s["Tên truyện"]).toLowerCase().includes(query)) || 
-                (s["Team dịch"] && String(s["Team dịch"]).toLowerCase().includes(query))
-            );
+            // Sắp xếp tự động A-Z theo tên truyện
+            const filtered = storyList
+                .filter(s => 
+                    (s["Tên truyện"] && String(s["Tên truyện"]).toLowerCase().includes(query)) || 
+                    (s["Team dịch"] && String(s["Team dịch"]).toLowerCase().includes(query))
+                )
+                .sort((a, b) => String(a["Tên truyện"] || '').localeCompare(String(b["Tên truyện"] || ''), 'vi', { sensitivity: 'base' }));
 
             document.getElementById('count').innerText = filtered.length;
 
