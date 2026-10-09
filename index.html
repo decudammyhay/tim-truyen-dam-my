@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm Truyện Đam - Tra Cứu & Đóng Góp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #fff5f5;
+            --bg-card: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --primary: #e53e3e;
+            --primary-hover: #c53030;
+            --primary-soft: #fff5f5;
+            --border-color: #fed7d7;
+            --card-shadow: 0 4px 15px rgba(229, 62, 62, 0.08);
+        }
+
+        /* Các Theme Màu Tùy Chọn */
+        [data-theme="blue"] {
+            --bg-primary: #f0f8ff;
+            --bg-card: #ffffff;
+            --text-primary: #1a365d;
+            --text-secondary: #4a5568;
+            --primary: #3182ce;
+            --primary-hover: #2b6cb0;
+            --primary-soft: #ebf8ff;
+            --border-color: #bee3f8;
+            --card-shadow: 0 4px 15px rgba(49, 130, 206, 0.08);
+        }
+
+        [data-theme="purple"] {
+            --bg-primary: #faf5ff;
+            --bg-card: #ffffff;
+            --text-primary: #44337a;
+            --text-secondary: #6b46c1;
+            --primary: #805ad5;
+            --primary-hover: #6b46c1;
+            --primary-soft: #faf5ff;
+            --border-color: #e9d8fd;
+            --card-shadow: 0 4px 15px rgba(128, 90, 213, 0.08);
+        }
+
+        [data-theme="amber"] {
+            --bg-primary: #fffaf0;
+            --bg-card: #ffffff;
+            --text-primary: #744210;
+            --text-secondary: #975a16;
+            --primary: #dd6b20;
+            --primary-hover: #c05621;
+            --primary-soft: #fffaf0;
+            --border-color: #feebc8;
+            --card-shadow: 0 4px 15px rgba(221, 107, 32, 0.08);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a202c;
+            --bg-card: #2d3748;
+            --text-primary: #f7fafc;
+            --text-secondary: #a0aec0;
+            --primary: #fc8181;
+            --primary-hover: #f56565;
+            --primary-soft: #2c1214;
+            --border-color: #4a5568;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.25s ease; }
+        body { background-color: var(--bg-primary); color: var(--text-primary); padding-bottom: 60px; }
+        
+        header { 
+            background-color: var(--bg-card); 
+            border-bottom: 1px solid var(--border-color); 
+            padding: 1rem 2rem; 
+            position: sticky; top: 0; z-index: 100; 
+            display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: var(--card-shadow); 
+        }
+
+        .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .header-controls { display: flex; align-items: center; gap: 10px; }
+
+        .theme-select {
+            padding: 6px 12px; border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary); color: var(--text-primary);
+            font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none;
+        }
+
+        .btn { padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--primary); color: white; border: none; }
+        .btn-primary:hover { background: var(--primary-hover); }
+
+        .container { max-width: 1100px; margin: 25px auto; padding: 0 20px; }
+        
+        .card-box { 
+            background: var(--bg-card); border-radius: 16px; 
+            border: 1px solid var(--border-color); padding: 24px; 
+            margin-bottom: 25px; box-shadow: var(--card-shadow); 
+        }
+
+        .card-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+
+        input, select { 
+            padding: 10px 14px; border-radius: 8px; 
+            border: 1px solid var(--border-color); background: var(--bg-primary); 
+            color: var(--text-primary); outline: none; font-size: 0.95rem; 
+        }
+
+        input:focus, select:focus { border-color: var(--primary); }
+
+        /* Bảng hiển thị */
+        .search-input { width: 100%; margin-bottom: 15px; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.95rem; }
+
+        .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; background: var(--bg-card); text-align: left; font-size: 0.9rem; }
+        th { background: var(--primary-soft); color: var(--primary); padding: 12px 16px; font-weight: 700; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
+        td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+
+        .badge-team { 
+            background: var(--primary-soft); color: var(--primary); 
+            padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; 
+            font-weight: 700; border: 1px solid var(--border-color); display: inline-block;
+        }
+
+        .link-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 5px 10px; border-radius: 6px; font-size: 0.8rem;
+            font-weight: 600; text-decoration: none; background: var(--primary-soft);
+            color: var(--primary); border: 1px solid var(--border-color);
+        }
+
+        .link-btn:hover { background: var(--primary); color: white; }
+
+        .toast { position: fixed; bottom: 20px; right: 20px; background: var(--primary); color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; z-index: 1000; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-heart"></i> Tìm Truyện Đam
+        </div>
+        <div class="header-controls">
+            <!-- Selector Đổi Theme Màu -->
+            <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
+                <option value="default">🌸 Đỏ Nhạt (Mặc định)</option>
+                <option value="blue">🌊 Xanh Lam</option>
+                <option value="purple">🍇 Tím Nhạt</option>
+                <option value="amber">🍯 Vàng Hổ Phách</option>
+                <option value="dark">🌙 Chế Độ Tối</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Form Thêm Truyện Mới -->
+        <div class="card-box">
+            <div class="card-title">
+                <i class="fa-solid fa-plus-circle"></i> Đóng Góp / Thêm Link Truyện Mới
+            </div>
+            <form id="storyForm" onsubmit="saveStory(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Tên truyện *</label>
+                        <input type="text" id="title" required placeholder="Nhập tên truyện...">
+                    </div>
+                    <div class="form-group">
+                        <label>Team dịch</label>
+                        <select id="team">
+                            <option value="Đam Mỹ Thư Quán">Đam Mỹ Thư Quán</option>
+                            <option value="Đề Cử Đam Mỹ Hay">Đề Cử Đam Mỹ Hay</option>
+                            <option value="Góc Đam Mỹ Của Thỏ">Góc Đam Mỹ Của Thỏ</option>
+                            <option value="Team Bé Bi">Team Bé Bi</option>
+                            <option value="Trà Hoa Nữ">Trà Hoa Nữ</option>
+                            <option value="Khác">Team dịch khác...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Link blogger</label>
+                        <input type="url" id="linkBlogger" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Link motruyen</label>
+                        <input type="url" id="linkMotruyen" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Link khác</label>
+                        <input type="url" id="linkKhac" placeholder="https://...">
+                    </div>
+                </div>
+                <div style="margin-top: 18px; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary" id="btnSave">
+                        <i class="fa-solid fa-paper-plane"></i> Gửi Về Google Sheet
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bảng Tra Cứu Truyện -->
+        <div class="card-box">
+            <div class="card-title">
+                <i class="fa-solid fa-magnifying-glass"></i> Tra Cứu Truyện & Link Dịch (<span id="count">0</span>)
+            </div>
+
+            <input type="text" id="searchInput" class="search-input" placeholder="Gõ tìm tên truyện hoặc team dịch..." oninput="renderTable()">
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên truyện</th>
+                            <th>Team dịch</th>
+                            <th>Link blogger</th>
+                            <th>Link motruyen</th>
+                            <th>Link khác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Render từ JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toastNotification">Thông báo</div>
+
+    <script>
+        // 🛠️ DÁN URL APPS SCRIPT CỦA BẠN VÀO ĐÂY:
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-z0tWtgmzXeeUdeWNPSv8UcDGiFN7u5_wCDKnxdE8NXXVcTUiJPoyeuiKyzdKXw/exec";
+
+        let storyList = [];
+
+        // Thay đổi chủ đề màu sắc
+        function changeTheme(theme) {
+            if(theme === 'default') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', theme);
+            }
+            localStorage.setItem('user_theme', theme);
+        }
+
+        // Khôi phục theme đã chọn trước đó
+        const savedTheme = localStorage.getItem('user_theme') || 'default';
+        document.getElementById('themeSelect').value = savedTheme;
+        changeTheme(savedTheme);
+
+        // Tải dữ liệu từ Google Sheet
+        async function fetchStories() {
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL);
+                storyList = await res.json();
+                renderTable();
+            } catch (err) {
+                console.error("Lỗi tải dữ liệu:", err);
+            }
+        }
+
+        // Gửi dữ liệu về Google Sheet
+        async function saveStory(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSave');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang gửi...';
+
+            const payload = {
+                title: document.getElementById('title').value.trim(),
+                team: document.getElementById('team').value,
+                linkBlogger: document.getElementById('linkBlogger').value.trim(),
+                linkMotruyen: document.getElementById('linkMotruyen').value.trim(),
+                linkKhac: document.getElementById('linkKhac').value.trim()
+            };
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                document.getElementById('storyForm').reset();
+                showToast("Đã gửi thông tin truyện về Google Sheet!");
+                setTimeout(fetchStories, 1500);
+            } catch (err) {
+                alert("Lỗi khi gửi: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Gửi Về Google Sheet';
+            }
+        }
+
+        function renderTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            const filtered = storyList.filter(s => 
+                (s["Tên truyện"] && String(s["Tên truyện"]).toLowerCase().includes(query)) || 
+                (s["Team dịch"] && String(s["Team dịch"]).toLowerCase().includes(query))
+            );
+
+            document.getElementById('count').innerText = filtered.length;
+
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-secondary); padding: 20px;">Đang tải dữ liệu hoặc chưa tìm thấy truyện...</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>${s["Tên truyện"] || ''}</b></td>
+                    <td><span class="badge-team">${s["Team dịch"] || 'Chưa rõ'}</span></td>
+                    <td>${s["Link blogger"] ? `<a href="${s["Link blogger"]}" target="_blank" class="link-btn"><i class="fa-solid fa-globe"></i> Blogger</a>` : '-'}</td>
+                    <td>${s["Link motruyen"] ? `<a href="${s["Link motruyen"]}" target="_blank" class="link-btn"><i class="fa-solid fa-book"></i> Motruyen</a>` : '-'}</td>
+                    <td>${s["Link khác"] ? `<a href="${s["Link khác"]}" target="_blank" class="link-btn"><i class="fa-solid fa-link"></i> Xem link</a>` : '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2500);
+        }
+
+        fetchStories();
+    </script>
+</body>
+</html>
