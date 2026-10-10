@@ -18,6 +18,7 @@
             --primary-soft: #fff5f5;
             --border-color: #fed7d7;
             --card-shadow: 0 4px 15px rgba(229, 62, 62, 0.08);
+            --scrollbar-thumb: #feb2b2;
         }
 
         /* Themes */
@@ -25,21 +26,25 @@
             --bg-primary: #f0f8ff; --bg-card: #ffffff; --text-primary: #1a365d;
             --text-secondary: #4a5568; --primary: #3182ce; --primary-hover: #2b6cb0;
             --primary-soft: #ebf8ff; --border-color: #bee3f8; --card-shadow: 0 4px 15px rgba(49, 130, 206, 0.08);
+            --scrollbar-thumb: #90cdf4;
         }
         [data-theme="purple"] {
             --bg-primary: #faf5ff; --bg-card: #ffffff; --text-primary: #44337a;
             --text-secondary: #6b46c1; --primary: #805ad5; --primary-hover: #6b46c1;
             --primary-soft: #faf5ff; --border-color: #e9d8fd; --card-shadow: 0 4px 15px rgba(128, 90, 213, 0.08);
+            --scrollbar-thumb: #d6bcfa;
         }
         [data-theme="amber"] {
             --bg-primary: #fffaf0; --bg-card: #ffffff; --text-primary: #744210;
             --text-secondary: #975a16; --primary: #dd6b20; --primary-hover: #c05621;
             --primary-soft: #fffaf0; --border-color: #feebc8; --card-shadow: 0 4px 15px rgba(221, 107, 32, 0.08);
+            --scrollbar-thumb: #fbd38d;
         }
         [data-theme="dark"] {
             --bg-primary: #1a202c; --bg-card: #2d3748; --text-primary: #f7fafc;
             --text-secondary: #a0aec0; --primary: #fc8181; --primary-hover: #f56565;
             --primary-soft: #2c1214; --border-color: #4a5568; --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            --scrollbar-thumb: #4a5568;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.25s, color 0.25s, border-color 0.25s; }
@@ -210,9 +215,43 @@
             color: var(--text-primary); font-size: 0.85rem; outline: none;
         }
 
-        .table-responsive { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border-color); }
+        /* 🏆 KHUNG BẢNG CÓ THANH TRUỘT DỌC CỐ ĐỊNH CHIỀU CAO 🏆 */
+        .table-responsive { 
+            overflow-x: auto; 
+            overflow-y: auto;
+            max-height: 480px; /* Giới hạn chiều cao vừa vặn ~ 10 bộ truyện */
+            border-radius: 10px; 
+            border: 1px solid var(--border-color); 
+        }
+
+        /* Tùy chỉnh thanh trượt mượt đẹp */
+        .table-responsive::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .table-responsive::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 4px;
+        }
+
         table { width: 100%; border-collapse: collapse; background: var(--bg-card); text-align: left; font-size: 0.82rem; }
-        th { background: var(--primary-soft); color: var(--primary); padding: 10px 12px; font-weight: 700; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
+        
+        /* Tiêu đề bảng cố định khi cuộn */
+        th { 
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--primary-soft); 
+            color: var(--primary); 
+            padding: 10px 12px; 
+            font-weight: 700; 
+            border-bottom: 2px solid var(--border-color); 
+            white-space: nowrap; 
+        }
+        
         td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
 
         .badge-team { 
@@ -234,17 +273,15 @@
 <body>
 
     <header>
-        <div></div> <!-- Spacer bên trái -->
+        <div></div>
         <div class="logo">
             <i class="fa-solid fa-heart"></i> Tìm Truyện Đam Mỹ
         </div>
-        <!-- Nút Icon Đổi Theme -->
         <button class="theme-btn-toggle" onclick="toggleThemeModal()" title="Đổi màu giao diện">
             <i class="fa-solid fa-palette"></i>
         </button>
     </header>
 
-    <!-- Menu Chọn Theme Xổ Ra Khi Bấm Icon -->
     <div class="theme-modal" id="themeModal">
         <div class="theme-option" onclick="changeTheme('default')">🌸 Đỏ Nhạt</div>
         <div class="theme-option" onclick="changeTheme('blue')">🌊 Xanh Lam</div>
@@ -255,7 +292,6 @@
 
     <div class="container">
 
-        <!-- Thống Kê Mini Analytics (1 Hàng 3 Cột Ngang) -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
@@ -280,7 +316,6 @@
             </div>
         </div>
 
-        <!-- Form Nhập Truyện Mới -->
         <div class="card-box">
             <div class="card-title">
                 <div class="card-title-left"><i class="fa-solid fa-plus-circle"></i> Thêm Link Truyện Mới</div>
@@ -323,7 +358,6 @@
             </form>
         </div>
 
-        <!-- Bảng Danh Sách Tra Cứu -->
         <div class="card-box">
             <div class="card-title">
                 <div class="card-title-left"><i class="fa-solid fa-magnifying-glass"></i> Tra Cứu Truyện</div>
@@ -342,6 +376,7 @@
                 </select>
             </div>
 
+            <!-- Khung Bảng có Thanh Cuộn Cố Định -->
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -374,7 +409,6 @@
             modal.classList.toggle('active');
         }
 
-        // Đóng modal khi bấm ra ngoài
         document.addEventListener('click', (e) => {
             const modal = document.getElementById('themeModal');
             const btn = document.querySelector('.theme-btn-toggle');
